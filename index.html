@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entropy Protocol · 121 editions by NULLGRID</title>
+    <meta name="description" content="121 fully on-chain lattices that evolve over a real ten-year horizon. Structure dissolves toward a per-token decay limit while inner light rises toward its illumination limit." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Entropy Protocol · 121 editions by NULLGRID" />
+    <meta property="og:description" content="A fully on-chain generative collection that lives on a ten-year clock. Watch all 121 evolve." />
+    <meta property="og:image" content="https://nullgrid.art/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nullgrid.art/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@NULLGRID_" />
+    <meta name="twitter:creator" content="@NULLGRID_" />
+    <meta name="twitter:title" content="Entropy Protocol · 121 editions by NULLGRID" />
+    <meta name="twitter:description" content="A fully on-chain generative collection that lives on a ten-year clock. Watch all 121 evolve." />
+    <meta name="twitter:image" content="https://nullgrid.art/og.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #08090c;
+        --panel: #13151b;
+        --line: #23262b;
+        --text: #f4f2ed;
+        --muted: #8a8a91;
+        --accent: #c7b38b;
+        --reserved: #e3b15e;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding: 0 0 80px;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(8, 9, 12, 0.92);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line);
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .title .label {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .title h1 {
+        margin: 2px 0 0;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--accent);
+      }
+
+      .stops {
+        display: flex;
+        gap: 4px;
+        background: #0a0b0e;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 4px;
+      }
+      .stop {
+        font: inherit;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        padding: 8px 14px;
+        border-radius: 7px;
+        font-size: 13px;
+        line-height: 1.1;
+        text-align: center;
+        transition: background 0.12s ease, color 0.12s ease;
+      }
+      .stop small { display: block; font-size: 9px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 2px; }
+      .stop:hover { color: var(--text); }
+      .stop.active { background: var(--accent); color: #0a0b0e; }
+      .stop.active small { opacity: 0.8; }
+
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        min-width: 110px;
+        text-align: right;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        padding: 20px 24px;
+      }
+      figure.cell {
+        margin: 0;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 0.12s ease, transform 0.05s ease;
+        position: relative;
+      }
+      figure.cell:hover { border-color: var(--accent); transform: translateY(-1px); }
+      figure.cell.reserved { border-color: rgba(227, 177, 94, 0.4); }
+      figure.cell img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        background: #050608;
+      }
+      figcaption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+      }
+      figcaption .id { font-family: ui-monospace, Menlo, monospace; color: var(--text); }
+      figcaption .tiers { color: var(--muted); font-size: 10px; letter-spacing: 0.04em; }
+      .star { color: var(--reserved); }
+      .badge-row {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        display: flex;
+        gap: 4px;
+      }
+      .tdot { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(0,0,0,0.4); }
+
+      /* offscreen bake canvas */
+      #bakeCanvas {
+        position: absolute;
+        left: -10000px;
+        top: 0;
+        width: 300px;
+        height: 300px;
+      }
+
+      .legend {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding: 0 24px 8px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .legend span { display: inline-flex; align-items: center; gap: 5px; }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="title">
+        <div class="label">Genesis · 121 editions</div>
+        <h1>Entropy Protocol · Collection gallery</h1>
+      </div>
+      <div class="stops" id="stops"></div>
+      <div class="status" id="status">-</div>
+    </header>
+
+    <div class="legend" id="legend"></div>
+    <div class="grid" id="grid"></div>
+    <canvas id="bakeCanvas" width="300" height="300"></canvas>
+
+    <script type="module" src="/viewer/gallery.js"></script>
+  
+    <footer style="text-align:center;padding:28px 0 8px;font-size:12px;color:#8a8a91;font-family:'Space Grotesk',system-ui,sans-serif;">
+      a long-horizon, fully on-chain collection by NULLGRID ·
+      <a href="https://x.com/NULLGRID_" target="_blank" rel="noopener" style="color:#c7b38b;text-decoration:none;">@NULLGRID_</a>
+      · click any piece to explore its full ten-year life
+    </footer>
+  </body>
+</html>

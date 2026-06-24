@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entropy Protocol · token viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c0d10;
+        --panel: #13151b;
+        --text: #f4f2ed;
+        --muted: #9b9aa3;
+        --accent: #c7b38b;
+        --reserved: #e3b15e;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+        background: radial-gradient(circle at top, #1b1f2a, var(--bg));
+        color: var(--text);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(300px, 360px) 1fr;
+        min-height: 100vh;
+      }
+      .panel {
+        background: var(--panel);
+        padding: 24px;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .panel h1 {
+        font-size: 18px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin: 0 0 4px;
+        color: var(--accent);
+      }
+      .panel .sub {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .nav {
+        display: grid;
+        grid-template-columns: 36px 1fr 36px;
+        gap: 8px;
+        align-items: center;
+      }
+      .nav button {
+        height: 38px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: #0c0d10;
+        color: var(--text);
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav button:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .nav input {
+        height: 38px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        padding: 0 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: #0c0d10;
+        color: var(--text);
+        font-family: inherit;
+      }
+      .reserved-badge {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 3px 8px;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: 999px;
+        background: rgba(227, 177, 94, 0.15);
+        color: var(--reserved);
+        border: 1px solid rgba(227, 177, 94, 0.4);
+      }
+      .reserved-badge.hidden { display: none; }
+      .specs {
+        margin-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 16px;
+      }
+      .spec {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 6px 0;
+        font-size: 13px;
+        color: var(--text);
+      }
+      .spec .k {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .spec .v {
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      .spec .v small {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 400;
+        margin-top: 2px;
+      }
+
+      .viewer {
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: 24px 24px 16px;
+        gap: 16px;
+      }
+      .canvas-wrap {
+        display: grid;
+        place-items: center;
+      }
+      canvas {
+        width: min(78vh, 80vw, 860px);
+        height: min(78vh, 80vw, 860px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0a0b0f;
+        display: block;
+      }
+
+      .timeline-wrap {
+        max-width: 860px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .readout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+      .readout .left { color: var(--muted); }
+      .readout .right { color: var(--accent); }
+      .timeline-row {
+        display: grid;
+        grid-template-columns: 36px 1fr 80px;
+        gap: 12px;
+        align-items: center;
+      }
+      #playBtn {
+        height: 38px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: var(--accent);
+        color: #111;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      #timeline {
+        width: 100%;
+        height: 38px;
+      }
+      .speed {
+        text-align: right;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .ticks {
+        position: relative;
+        height: 16px;
+        margin-top: 4px;
+        font-size: 10px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .tick {
+        position: absolute;
+        transform: translateX(-50%);
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="panel">
+        <h1>Entropy Protocol</h1>
+        <div class="sub">Per-token QA viewer</div>
+
+        <div class="nav">
+          <button id="prevBtn" type="button">←</button>
+          <input id="tokenId" type="number" min="1" max="121" value="1" />
+          <button id="nextBtn" type="button">→</button>
+        </div>
+        <div id="reservedBadge" class="reserved-badge hidden">Reserved</div>
+
+        <div class="specs" id="specs">
+          <!-- Populated dynamically. Read-only. -->
+        </div>
+      </aside>
+      <main class="viewer">
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="860" height="860"></canvas>
+        </div>
+        <div class="timeline-wrap">
+          <div class="readout">
+            <span class="left" id="readoutLeft"></span>
+            <span class="right" id="readoutRight"></span>
+          </div>
+          <div class="timeline-row">
+            <button id="playBtn" type="button">▶</button>
+            <input id="timeline" type="range" min="0" max="1000" step="1" value="0" />
+            <div class="speed">1s = 1y</div>
+          </div>
+          <div class="ticks" id="ticks"></div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/viewer/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,919 @@
+{
+  "_summary": {
+    "total": 121,
+    "illumination": {
+      "resilient": 44,
+      "balanced": 44,
+      "fragile": 23,
+      "transcendent": 10,
+      "tierRanges": {
+        "resilient": "69-78",
+        "balanced": "79-88",
+        "fragile": "89-94",
+        "transcendent": "95-97"
+      }
+    },
+    "decay": {
+      "intact": 44,
+      "weathered": 44,
+      "skeletal": 23,
+      "dissolved": 10,
+      "tierRanges": {
+        "intact": "40-52",
+        "weathered": "53-67",
+        "skeletal": "68-81",
+        "dissolved": "82-95"
+      }
+    },
+    "meaning": "illuminationLimit / 10 = years to peak brightness; decayLimit / 10 = years to peak dissolution. Both axes share the Ethereum block clock."
+  },
+  "_reserved": {
+    "ids": [
+      1,
+      13,
+      20,
+      42,
+      50,
+      55,
+      64,
+      76,
+      99,
+      121
+    ],
+    "meaning": "Hand-curated for the studio set. Spread across both tier dimensions."
+  },
+  "tokens": {
+    "1": {
+      "illuminationLimit": 96,
+      "illuminationTier": "transcendent",
+      "decayLimit": 84,
+      "decayTier": "dissolved",
+      "reserved": true,
+      "illuminationNote": "Genesis - first edition ever minted",
+      "decayNote": "Genesis: bright (T-96) and nearly dissolved at peak. The first lattice surrenders most of its structure to the light."
+    },
+    "2": {
+      "illuminationLimit": 89,
+      "illuminationTier": "fragile",
+      "decayLimit": 70,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "3": {
+      "illuminationLimit": 90,
+      "illuminationTier": "fragile",
+      "decayLimit": 64,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "4": {
+      "illuminationLimit": 91,
+      "illuminationTier": "fragile",
+      "decayLimit": 40,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "5": {
+      "illuminationLimit": 92,
+      "illuminationTier": "fragile",
+      "decayLimit": 49,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "6": {
+      "illuminationLimit": 93,
+      "illuminationTier": "fragile",
+      "decayLimit": 79,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "7": {
+      "illuminationLimit": 95,
+      "illuminationTier": "transcendent",
+      "decayLimit": 75,
+      "decayTier": "skeletal",
+      "reserved": false,
+      "illuminationNote": "Lucky seven"
+    },
+    "8": {
+      "illuminationLimit": 94,
+      "illuminationTier": "fragile",
+      "decayLimit": 60,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "9": {
+      "illuminationLimit": 89,
+      "illuminationTier": "fragile",
+      "decayLimit": 74,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "10": {
+      "illuminationLimit": 90,
+      "illuminationTier": "fragile",
+      "decayLimit": 58,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "11": {
+      "illuminationLimit": 91,
+      "illuminationTier": "fragile",
+      "decayLimit": 43,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "12": {
+      "illuminationLimit": 92,
+      "illuminationTier": "fragile",
+      "decayLimit": 63,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "13": {
+      "illuminationLimit": 93,
+      "illuminationTier": "fragile",
+      "decayLimit": 87,
+      "decayTier": "dissolved",
+      "reserved": true,
+      "decayNote": "Fragile + Dissolved: bright (F-93) and almost fully dissolved (D-87). Heavy ascension into light."
+    },
+    "14": {
+      "illuminationLimit": 73,
+      "illuminationTier": "resilient",
+      "decayLimit": 42,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "15": {
+      "illuminationLimit": 94,
+      "illuminationTier": "fragile",
+      "decayLimit": 72,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "16": {
+      "illuminationLimit": 89,
+      "illuminationTier": "fragile",
+      "decayLimit": 51,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "17": {
+      "illuminationLimit": 90,
+      "illuminationTier": "fragile",
+      "decayLimit": 40,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "18": {
+      "illuminationLimit": 91,
+      "illuminationTier": "fragile",
+      "decayLimit": 68,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "19": {
+      "illuminationLimit": 92,
+      "illuminationTier": "fragile",
+      "decayLimit": 80,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "20": {
+      "illuminationLimit": 93,
+      "illuminationTier": "fragile",
+      "decayLimit": 66,
+      "decayTier": "weathered",
+      "reserved": true,
+      "decayNote": "Fragile + Weathered: bright (F-93) with a mid-life dissolution (D-66)."
+    },
+    "21": {
+      "illuminationLimit": 91,
+      "illuminationTier": "fragile",
+      "decayLimit": 72,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "22": {
+      "illuminationLimit": 94,
+      "illuminationTier": "fragile",
+      "decayLimit": 40,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "23": {
+      "illuminationLimit": 89,
+      "illuminationTier": "fragile",
+      "decayLimit": 86,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "24": {
+      "illuminationLimit": 90,
+      "illuminationTier": "fragile",
+      "decayLimit": 57,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "25": {
+      "illuminationLimit": 91,
+      "illuminationTier": "fragile",
+      "decayLimit": 59,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "26": {
+      "illuminationLimit": 79,
+      "illuminationTier": "balanced",
+      "decayLimit": 47,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "27": {
+      "illuminationLimit": 80,
+      "illuminationTier": "balanced",
+      "decayLimit": 55,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "28": {
+      "illuminationLimit": 81,
+      "illuminationTier": "balanced",
+      "decayLimit": 66,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "29": {
+      "illuminationLimit": 82,
+      "illuminationTier": "balanced",
+      "decayLimit": 61,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "30": {
+      "illuminationLimit": 83,
+      "illuminationTier": "balanced",
+      "decayLimit": 64,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "31": {
+      "illuminationLimit": 84,
+      "illuminationTier": "balanced",
+      "decayLimit": 45,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "32": {
+      "illuminationLimit": 85,
+      "illuminationTier": "balanced",
+      "decayLimit": 42,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "33": {
+      "illuminationLimit": 96,
+      "illuminationTier": "transcendent",
+      "decayLimit": 63,
+      "decayTier": "weathered",
+      "reserved": false,
+      "illuminationNote": "Master number"
+    },
+    "34": {
+      "illuminationLimit": 86,
+      "illuminationTier": "balanced",
+      "decayLimit": 48,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "35": {
+      "illuminationLimit": 87,
+      "illuminationTier": "balanced",
+      "decayLimit": 46,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "36": {
+      "illuminationLimit": 88,
+      "illuminationTier": "balanced",
+      "decayLimit": 55,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "37": {
+      "illuminationLimit": 79,
+      "illuminationTier": "balanced",
+      "decayLimit": 44,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "38": {
+      "illuminationLimit": 80,
+      "illuminationTier": "balanced",
+      "decayLimit": 47,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "39": {
+      "illuminationLimit": 81,
+      "illuminationTier": "balanced",
+      "decayLimit": 45,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "40": {
+      "illuminationLimit": 82,
+      "illuminationTier": "balanced",
+      "decayLimit": 46,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "41": {
+      "illuminationLimit": 83,
+      "illuminationTier": "balanced",
+      "decayLimit": 74,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "42": {
+      "illuminationLimit": 71,
+      "illuminationTier": "resilient",
+      "decayLimit": 56,
+      "decayTier": "weathered",
+      "reserved": true,
+      "illuminationNote": "Reserved - the answer",
+      "decayNote": "Resilient + Weathered: lived-in middle ground."
+    },
+    "43": {
+      "illuminationLimit": 84,
+      "illuminationTier": "balanced",
+      "decayLimit": 63,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "44": {
+      "illuminationLimit": 85,
+      "illuminationTier": "balanced",
+      "decayLimit": 48,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "45": {
+      "illuminationLimit": 86,
+      "illuminationTier": "balanced",
+      "decayLimit": 43,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "46": {
+      "illuminationLimit": 87,
+      "illuminationTier": "balanced",
+      "decayLimit": 52,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "47": {
+      "illuminationLimit": 88,
+      "illuminationTier": "balanced",
+      "decayLimit": 72,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "48": {
+      "illuminationLimit": 79,
+      "illuminationTier": "balanced",
+      "decayLimit": 62,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "49": {
+      "illuminationLimit": 80,
+      "illuminationTier": "balanced",
+      "decayLimit": 51,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "50": {
+      "illuminationLimit": 84,
+      "illuminationTier": "balanced",
+      "decayLimit": 60,
+      "decayTier": "weathered",
+      "reserved": true,
+      "illuminationNote": "Reserved - half-century midpoint",
+      "decayNote": "Balanced + Weathered: archetypal centre of the collection."
+    },
+    "51": {
+      "illuminationLimit": 81,
+      "illuminationTier": "balanced",
+      "decayLimit": 54,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "52": {
+      "illuminationLimit": 82,
+      "illuminationTier": "balanced",
+      "decayLimit": 91,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "53": {
+      "illuminationLimit": 83,
+      "illuminationTier": "balanced",
+      "decayLimit": 89,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "54": {
+      "illuminationLimit": 84,
+      "illuminationTier": "balanced",
+      "decayLimit": 67,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "55": {
+      "illuminationLimit": 82,
+      "illuminationTier": "balanced",
+      "decayLimit": 70,
+      "decayTier": "skeletal",
+      "reserved": true,
+      "illuminationNote": "Reserved (Nullgrid Studios)",
+      "decayNote": "Balanced + Skeletal: dissolves toward the end of its life."
+    },
+    "56": {
+      "illuminationLimit": 85,
+      "illuminationTier": "balanced",
+      "decayLimit": 73,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "57": {
+      "illuminationLimit": 86,
+      "illuminationTier": "balanced",
+      "decayLimit": 75,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "58": {
+      "illuminationLimit": 87,
+      "illuminationTier": "balanced",
+      "decayLimit": 60,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "59": {
+      "illuminationLimit": 88,
+      "illuminationTier": "balanced",
+      "decayLimit": 56,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "60": {
+      "illuminationLimit": 79,
+      "illuminationTier": "balanced",
+      "decayLimit": 49,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "61": {
+      "illuminationLimit": 80,
+      "illuminationTier": "balanced",
+      "decayLimit": 71,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "62": {
+      "illuminationLimit": 81,
+      "illuminationTier": "balanced",
+      "decayLimit": 42,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "63": {
+      "illuminationLimit": 82,
+      "illuminationTier": "balanced",
+      "decayLimit": 59,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "64": {
+      "illuminationLimit": 92,
+      "illuminationTier": "fragile",
+      "decayLimit": 44,
+      "decayTier": "intact",
+      "reserved": true,
+      "illuminationNote": "Reserved (Nullgrid Studios)",
+      "decayNote": "Fragile + Intact: bright but holds its form. Counterpoint to the tier name."
+    },
+    "65": {
+      "illuminationLimit": 83,
+      "illuminationTier": "balanced",
+      "decayLimit": 76,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "66": {
+      "illuminationLimit": 84,
+      "illuminationTier": "balanced",
+      "decayLimit": 81,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "67": {
+      "illuminationLimit": 85,
+      "illuminationTier": "balanced",
+      "decayLimit": 65,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "68": {
+      "illuminationLimit": 86,
+      "illuminationTier": "balanced",
+      "decayLimit": 45,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "69": {
+      "illuminationLimit": 96,
+      "illuminationTier": "transcendent",
+      "decayLimit": 43,
+      "decayTier": "intact",
+      "reserved": false,
+      "illuminationNote": "Echoes the 69% illumination lower bound"
+    },
+    "70": {
+      "illuminationLimit": 87,
+      "illuminationTier": "balanced",
+      "decayLimit": 65,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "71": {
+      "illuminationLimit": 88,
+      "illuminationTier": "balanced",
+      "decayLimit": 50,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "72": {
+      "illuminationLimit": 79,
+      "illuminationTier": "balanced",
+      "decayLimit": 51,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "73": {
+      "illuminationLimit": 69,
+      "illuminationTier": "resilient",
+      "decayLimit": 56,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "74": {
+      "illuminationLimit": 70,
+      "illuminationTier": "resilient",
+      "decayLimit": 60,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "75": {
+      "illuminationLimit": 76,
+      "illuminationTier": "resilient",
+      "decayLimit": 56,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "76": {
+      "illuminationLimit": 71,
+      "illuminationTier": "resilient",
+      "decayLimit": 42,
+      "decayTier": "intact",
+      "reserved": true,
+      "decayNote": "Resilient + Intact: a quiet survivor. Low brightness ceiling, mostly whole at peak, a calm anchor in the studio set."
+    },
+    "77": {
+      "illuminationLimit": 95,
+      "illuminationTier": "transcendent",
+      "decayLimit": 76,
+      "decayTier": "skeletal",
+      "reserved": false,
+      "illuminationNote": "Double seven"
+    },
+    "78": {
+      "illuminationLimit": 72,
+      "illuminationTier": "resilient",
+      "decayLimit": 64,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "79": {
+      "illuminationLimit": 73,
+      "illuminationTier": "resilient",
+      "decayLimit": 58,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "80": {
+      "illuminationLimit": 74,
+      "illuminationTier": "resilient",
+      "decayLimit": 57,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "81": {
+      "illuminationLimit": 75,
+      "illuminationTier": "resilient",
+      "decayLimit": 48,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "82": {
+      "illuminationLimit": 76,
+      "illuminationTier": "resilient",
+      "decayLimit": 53,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "83": {
+      "illuminationLimit": 77,
+      "illuminationTier": "resilient",
+      "decayLimit": 66,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "84": {
+      "illuminationLimit": 78,
+      "illuminationTier": "resilient",
+      "decayLimit": 44,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "85": {
+      "illuminationLimit": 69,
+      "illuminationTier": "resilient",
+      "decayLimit": 65,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "86": {
+      "illuminationLimit": 70,
+      "illuminationTier": "resilient",
+      "decayLimit": 41,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "87": {
+      "illuminationLimit": 71,
+      "illuminationTier": "resilient",
+      "decayLimit": 88,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "88": {
+      "illuminationLimit": 95,
+      "illuminationTier": "transcendent",
+      "decayLimit": 56,
+      "decayTier": "weathered",
+      "reserved": false,
+      "illuminationNote": "Double eight (abundance)"
+    },
+    "89": {
+      "illuminationLimit": 72,
+      "illuminationTier": "resilient",
+      "decayLimit": 53,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "90": {
+      "illuminationLimit": 73,
+      "illuminationTier": "resilient",
+      "decayLimit": 41,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "91": {
+      "illuminationLimit": 74,
+      "illuminationTier": "resilient",
+      "decayLimit": 46,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "92": {
+      "illuminationLimit": 75,
+      "illuminationTier": "resilient",
+      "decayLimit": 78,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "93": {
+      "illuminationLimit": 76,
+      "illuminationTier": "resilient",
+      "decayLimit": 47,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "94": {
+      "illuminationLimit": 77,
+      "illuminationTier": "resilient",
+      "decayLimit": 71,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "95": {
+      "illuminationLimit": 78,
+      "illuminationTier": "resilient",
+      "decayLimit": 57,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "96": {
+      "illuminationLimit": 69,
+      "illuminationTier": "resilient",
+      "decayLimit": 90,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "97": {
+      "illuminationLimit": 97,
+      "illuminationTier": "transcendent",
+      "decayLimit": 77,
+      "decayTier": "skeletal",
+      "reserved": false,
+      "illuminationNote": "Token number matches its own illumination limit"
+    },
+    "98": {
+      "illuminationLimit": 70,
+      "illuminationTier": "resilient",
+      "decayLimit": 73,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "99": {
+      "illuminationLimit": 86,
+      "illuminationTier": "balanced",
+      "decayLimit": 78,
+      "decayTier": "skeletal",
+      "reserved": true,
+      "illuminationNote": "Reserved - almost-100",
+      "decayNote": "Balanced + Skeletal: structure heavily eroded by year 7.8."
+    },
+    "100": {
+      "illuminationLimit": 96,
+      "illuminationTier": "transcendent",
+      "decayLimit": 52,
+      "decayTier": "intact",
+      "reserved": false,
+      "illuminationNote": "Centennial"
+    },
+    "101": {
+      "illuminationLimit": 71,
+      "illuminationTier": "resilient",
+      "decayLimit": 84,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "102": {
+      "illuminationLimit": 72,
+      "illuminationTier": "resilient",
+      "decayLimit": 62,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "103": {
+      "illuminationLimit": 73,
+      "illuminationTier": "resilient",
+      "decayLimit": 49,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "104": {
+      "illuminationLimit": 74,
+      "illuminationTier": "resilient",
+      "decayLimit": 58,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "105": {
+      "illuminationLimit": 75,
+      "illuminationTier": "resilient",
+      "decayLimit": 67,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "106": {
+      "illuminationLimit": 76,
+      "illuminationTier": "resilient",
+      "decayLimit": 50,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "107": {
+      "illuminationLimit": 77,
+      "illuminationTier": "resilient",
+      "decayLimit": 52,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "108": {
+      "illuminationLimit": 78,
+      "illuminationTier": "resilient",
+      "decayLimit": 85,
+      "decayTier": "dissolved",
+      "reserved": false
+    },
+    "109": {
+      "illuminationLimit": 69,
+      "illuminationTier": "resilient",
+      "decayLimit": 42,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "110": {
+      "illuminationLimit": 70,
+      "illuminationTier": "resilient",
+      "decayLimit": 59,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "111": {
+      "illuminationLimit": 96,
+      "illuminationTier": "transcendent",
+      "decayLimit": 50,
+      "decayTier": "intact",
+      "reserved": false,
+      "illuminationNote": "Triple unity"
+    },
+    "112": {
+      "illuminationLimit": 71,
+      "illuminationTier": "resilient",
+      "decayLimit": 62,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "113": {
+      "illuminationLimit": 72,
+      "illuminationTier": "resilient",
+      "decayLimit": 41,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "114": {
+      "illuminationLimit": 73,
+      "illuminationTier": "resilient",
+      "decayLimit": 44,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "115": {
+      "illuminationLimit": 74,
+      "illuminationTier": "resilient",
+      "decayLimit": 44,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "116": {
+      "illuminationLimit": 75,
+      "illuminationTier": "resilient",
+      "decayLimit": 43,
+      "decayTier": "intact",
+      "reserved": false
+    },
+    "117": {
+      "illuminationLimit": 76,
+      "illuminationTier": "resilient",
+      "decayLimit": 61,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "118": {
+      "illuminationLimit": 77,
+      "illuminationTier": "resilient",
+      "decayLimit": 69,
+      "decayTier": "skeletal",
+      "reserved": false
+    },
+    "119": {
+      "illuminationLimit": 78,
+      "illuminationTier": "resilient",
+      "decayLimit": 54,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "120": {
+      "illuminationLimit": 69,
+      "illuminationTier": "resilient",
+      "decayLimit": 61,
+      "decayTier": "weathered",
+      "reserved": false
+    },
+    "121": {
+      "illuminationLimit": 97,
+      "illuminationTier": "transcendent",
+      "decayLimit": 92,
+      "decayTier": "dissolved",
+      "reserved": true,
+      "illuminationNote": "Apex - artist hold (Nullgrid Studios)",
+      "decayNote": "Apex: bright (T-97) and nearly fully dissolved. The final lattice ascends past structure into pure light."
+    }
+  }
+}
