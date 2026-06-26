@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&display=swap"
     />
     <style>
       :root {
@@ -35,13 +35,15 @@
         --muted: #8a8a91;
         --accent: #c7b38b;
         --reserved: #e3b15e;
+        /* Intro keeps these two; the rest of the page is one font (Syne). */
         --font-display: "Fraunces", Georgia, "Times New Roman", serif;
         --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+        --font-page: "Syne", system-ui, sans-serif;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: var(--font-mono);
+        font-family: var(--font-page);
         background: var(--bg);
         color: var(--text);
         padding: 0 0 80px;
@@ -69,11 +71,10 @@
       }
       .title h1 {
         margin: 2px 0 0;
-        font-family: var(--font-display);
-        font-optical-sizing: auto;
+        font-family: var(--font-page);
         font-size: 21px;
-        font-weight: 500;
-        letter-spacing: 0.01em;
+        font-weight: 700;
+        letter-spacing: -0.01em;
         color: var(--accent);
       }
 
@@ -144,7 +145,7 @@
         font-size: 11px;
         font-variant-numeric: tabular-nums;
       }
-      figcaption .id { font-family: var(--font-mono); color: var(--text); }
+      figcaption .id { font-family: var(--font-page); color: var(--text); }
       figcaption .tiers { color: var(--muted); font-size: 10px; letter-spacing: 0.04em; }
       .star { color: var(--reserved); }
       .badge-row {
@@ -350,7 +351,7 @@
 
     <script type="module" src="/viewer/gallery.js"></script>
   
-    <footer style="text-align:center;padding:28px 0 8px;font-size:12px;color:#8a8a91;font-family:var(--font-mono);">
+    <footer style="text-align:center;padding:28px 0 8px;font-size:12px;color:#8a8a91;font-family:var(--font-page);">
       a long-horizon, fully on-chain collection by NULLGRID ·
       <a href="https://x.com/NULLGRID_" target="_blank" rel="noopener" style="color:#c7b38b;text-decoration:none;">@NULLGRID_</a>
       · click any piece to explore its full ten-year life
