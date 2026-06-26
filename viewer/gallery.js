@@ -1,14 +1,15 @@
 import { generateLattice } from "/engine/dist/src/index.js";
-import { createLatticeScene, stateAtYears } from "/viewer/scene.js";
+import { createLatticeScene, stateAtYears, cameraProfileForSeed } from "/viewer/scene.js";
 import { playIntro } from "/viewer/intro.js";
 
 const TOTAL_TOKENS = 121;
-const RENDER_PX = 300;       // bake resolution per thumbnail
-const ANIM_TIME = 12.0;      // fixed light-fragment animation time (deterministic)
+const RENDER_PX = 300;          // shared offscreen render size; cells blit from this
+const FRAME_BUDGET_MS = 11;     // per-frame render budget; visible cells round-robin within it
+const STATIC_TIME = 7200;       // fixed clock for reduced-motion (a flattering still angle)
 
-// Lifetime stops: fraction of the 10-year maximum horizon. A token whose limit
-// is 0.73 of the max (illumination 73 -> peak at year 7.3) caps at stops 0.75
-// and 1.0 and simply holds at its peak, same for the decay axis.
+// Lifetime stops: fraction of the 10-year maximum horizon. The lattices rotate
+// live AT the selected stop, so you can watch the whole collection turn at
+// year 0, year 5, year 10, etc.
 const STOPS = [
   { frac: 0.0, label: "0%", year: "year 0.0" },
   { frac: 0.25, label: "25%", year: "year 2.5" },
@@ -17,17 +18,7 @@ const STOPS = [
   { frac: 1.0, label: "100%", year: "year 10" },
 ];
 let stopIndex = 2; // default to 50%
-
-// Fixed, consistent camera for every thumbnail so comparison isolates content.
-const CAM_RADIUS = 14.5;
-const CAM_ANGLE = 0.7;
-const CAM = {
-  x: Math.sin(CAM_ANGLE) * CAM_RADIUS,
-  y: 2.2,
-  z: Math.cos(CAM_ANGLE) * CAM_RADIUS,
-  fov: 44,
-  lookAt: { x: 0, y: 0, z: 0 },
-};
+let currentFrac = STOPS[stopIndex].frac;
 
 const ILLUM_TIER_COLOUR = {
   resilient: "#6aa1ff",
@@ -46,11 +37,6 @@ const seedForToken = (id) => id * 100 + 1;
 const pad = (id) => String(id).padStart(3, "0");
 const titleCase = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
-// 1x1 transparent pixel, un-baked cells show this (a clean dark square via the
-// img background) instead of a broken-image icon + alt text.
-const BLANK_PX =
-  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
 const els = {
   stops: document.getElementById("stops"),
   grid: document.getElementById("grid"),
@@ -59,16 +45,35 @@ const els = {
   bakeCanvas: document.getElementById("bakeCanvas"),
 };
 
-let tokens = null;          // token-limits.json tokens map
+let tokens = null;
 let scene = null;
-let latticeCache = new Map();   // id -> lattice (deterministic, reusable)
-const imgCache = new Map();     // `${id}:${stopIndex}` -> dataURL
-let bakeGeneration = 0;         // cancels an in-flight bake when the stop changes
-const cellImg = {};             // id -> <img> element
+const latticeCache = new Map();   // id -> lattice (deterministic, reusable)
+const camCache = new Map();       // id -> per-seed camera profile
+const stateCache = new Map();     // id -> engine state at the current stop
+const cellCtx = {};               // id -> 2d context of the cell's canvas
+
+let reducedMotion = false;
+const visible = new Set();         // ids currently in (or near) the viewport
+let order = [];                    // round-robin order over visible ids
+let orderDirty = false;
+let cursor = 0;
+let running = false;
+const renderedStatic = new Set();  // reduced-motion: cells already drawn once
 
 function latticeFor(id) {
   if (!latticeCache.has(id)) latticeCache.set(id, generateLattice(seedForToken(id)));
   return latticeCache.get(id);
+}
+function camFor(id) {
+  if (!camCache.has(id)) camCache.set(id, cameraProfileForSeed(seedForToken(id)));
+  return camCache.get(id);
+}
+function stateFor(id) {
+  if (!stateCache.has(id)) {
+    const e = tokens[String(id)];
+    stateCache.set(id, stateAtYears(currentFrac * 10, e.illuminationLimit, e.decayLimit));
+  }
+  return stateCache.get(id);
 }
 
 // --- Build UI ---------------------------------------------------------------
@@ -113,17 +118,18 @@ function buildGrid() {
       `<span class="tdot" style="background:${ILLUM_TIER_COLOUR[e.illuminationTier]}"></span>` +
       `<span class="tdot" style="background:${DECAY_TIER_COLOUR[e.decayTier]}"></span>`;
 
-    const img = document.createElement("img");
-    img.alt = "";
-    img.src = BLANK_PX;
-    cellImg[id] = img;
+    // Each cell is its own live canvas; the shared renderer blits into it.
+    const cv = document.createElement("canvas");
+    cv.width = RENDER_PX;
+    cv.height = RENDER_PX;
+    cellCtx[id] = cv.getContext("2d");
 
     const cap = document.createElement("figcaption");
     cap.innerHTML =
       `<span class="id">#${pad(id)}${e.reserved ? ' <span class="star">★</span>' : ""}</span>` +
       `<span class="tiers">L${e.illuminationLimit} · D${e.decayLimit}</span>`;
 
-    cell.append(badges, img, cap);
+    cell.append(badges, cv, cap);
     cell.addEventListener("click", () => {
       window.open(`/viewer/?token=${id}`, "_blank", "noopener");
     });
@@ -132,65 +138,89 @@ function buildGrid() {
   els.grid.appendChild(frag);
 }
 
-// --- Baking -----------------------------------------------------------------
+// --- Live rendering ---------------------------------------------------------
 
-function bakeOne(id, frac) {
+function renderCell(id, now) {
   const e = tokens[String(id)];
-  const years = frac * 10;
-  const state = stateAtYears(years, e.illuminationLimit, e.decayLimit);
+  const cp = camFor(id);
+  const ct = now * cp.orbitSpeed * cp.orbitDirection + cp.yawPhase;
   scene.setLattice(latticeFor(id));
   scene.renderFrame({
-    state,
+    state: stateFor(id),
     illuminationLimit: e.illuminationLimit,
-    animTime: ANIM_TIME,
-    cam: CAM,
+    animTime: now / 1000,
+    cam: {
+      x: Math.sin(ct) * cp.radius,
+      y: Math.sin(ct * 0.5) * cp.heightAmplitude,
+      z: Math.cos(ct) * cp.radius,
+      fov: cp.fov,
+      lookAt: { x: 0, y: 0, z: 0 },
+    },
   });
-  // JPEG: the scene renders on opaque black so no alpha is needed; JPEG encodes
-  // several times faster than PNG and keeps the 605-thumbnail cache compact.
-  return scene.snapshot("image/jpeg", 0.86);
+  cellCtx[id].drawImage(scene.canvas, 0, 0, RENDER_PX, RENDER_PX);
 }
 
-async function bakeStop(idx) {
-  const gen = ++bakeGeneration;
-  const frac = STOPS[idx].frac;
-  let done = 0;
+let raf = 0;
+function frame(now) {
+  if (!running) return;
+  if (document.hidden) { raf = requestAnimationFrame(frame); return; }
+  if (orderDirty) { order = [...visible]; orderDirty = false; if (cursor >= order.length) cursor = 0; }
 
-  for (let id = 1; id <= TOTAL_TOKENS; id++) {
-    if (gen !== bakeGeneration) return; // a newer stop selection superseded us
-
-    const key = `${id}:${idx}`;
-    let dataUrl = imgCache.get(key);
-    if (!dataUrl) {
-      dataUrl = bakeOne(id, frac);
-      imgCache.set(key, dataUrl);
-    }
-    // dataUrl is JPEG (see bakeOne), fast to encode, small to cache.
-    cellImg[id].src = dataUrl;
-    done++;
-
-    if (done % 6 === 0) {
-      els.status.textContent = `baking ${done}/${TOTAL_TOKENS}…`;
-      // Yield so the browser paints the freshly-baked thumbnails.
-      await new Promise((r) => requestAnimationFrame(r));
+  if (order.length) {
+    const start = performance.now();
+    let done = 0;
+    // Round-robin the visible cells within a per-frame time budget. With slow
+    // orbits, even a few updates per second per cell read as smooth rotation.
+    while (done < order.length && performance.now() - start < FRAME_BUDGET_MS) {
+      renderCell(order[cursor % order.length], now);
+      cursor++;
+      done++;
     }
   }
-  if (gen === bakeGeneration) {
-    els.status.textContent = `${STOPS[idx].label} · ${STOPS[idx].year}`;
-  }
+  raf = requestAnimationFrame(frame);
 }
+
+// --- Stops ------------------------------------------------------------------
 
 function selectStop(idx) {
-  if (idx === stopIndex && els.status.textContent !== "-") {
-    // already showing; ignore re-click
-  }
   stopIndex = idx;
+  currentFrac = STOPS[idx].frac;
+  stateCache.clear();
   [...els.stops.children].forEach((b, i) => b.classList.toggle("active", i === idx));
-  bakeStop(idx);
+  els.status.textContent = `${STOPS[idx].label} · ${STOPS[idx].year}`;
+  if (reducedMotion) {
+    // Re-draw the cells that are on screen at the new lifetime stop.
+    renderedStatic.clear();
+    for (const id of visible) { renderCell(id, STATIC_TIME); renderedStatic.add(id); }
+  }
+}
+
+// --- Viewport tracking ------------------------------------------------------
+
+function observeCells() {
+  const io = new IntersectionObserver((entries) => {
+    for (const en of entries) {
+      const id = Number(en.target.dataset.id);
+      if (en.isIntersecting) {
+        visible.add(id);
+        orderDirty = true;
+        if (reducedMotion && !renderedStatic.has(id)) {
+          renderCell(id, STATIC_TIME);
+          renderedStatic.add(id);
+        }
+      } else {
+        visible.delete(id);
+        orderDirty = true;
+      }
+    }
+  }, { root: null, rootMargin: "150px 0px", threshold: 0.01 });
+  for (const cell of els.grid.children) io.observe(cell);
 }
 
 // --- Boot -------------------------------------------------------------------
 
 (async function boot() {
+  reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   els.status.textContent = "loading…";
   const res = await fetch("/metadata/token-limits.json");
   if (!res.ok) {
@@ -205,17 +235,26 @@ function selectStop(idx) {
   buildGrid();
 
   // Cinematic cold-open first, on a single WebGL context. Wait for it to finish
-  // and free its context before creating the bake renderer: the intro then
-  // renders reliably everywhere (a few software-GL fallbacks evict a second
-  // live context). The grid materialises as the thumbnails bake afterwards.
+  // and free its context before creating the gallery renderer.
   await playIntro({ tokens });
 
   scene = createLatticeScene({
     canvas: els.bakeCanvas,
     size: RENDER_PX,
-    preserveDrawingBuffer: true,
+    preserveDrawingBuffer: true, // required: cells blit from this canvas
   });
   scene.resize(RENDER_PX);
 
-  await bakeStop(stopIndex);
+  els.status.textContent = `${STOPS[stopIndex].label} · ${STOPS[stopIndex].year}`;
+  observeCells();
+
+  if (reducedMotion) {
+    // Static gallery: each cell draws once when it scrolls into view.
+    return;
+  }
+  running = true;
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && running) { /* loop resumes on next rAF */ }
+  });
+  raf = requestAnimationFrame(frame);
 })();

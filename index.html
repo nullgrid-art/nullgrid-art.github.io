@@ -35,6 +35,7 @@
         --muted: #8a8a91;
         --accent: #c7b38b;
         --reserved: #e3b15e;
+        --genesis: #6fd6ad;
         /* Intro keeps these two; the rest of the page is one font (Syne). */
         --font-display: "Fraunces", Georgia, "Times New Roman", serif;
         --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -67,7 +68,7 @@
         font-size: 10px;
         letter-spacing: 0.3em;
         text-transform: uppercase;
-        color: var(--muted);
+        color: var(--genesis);
       }
       .title h1 {
         margin: 2px 0 0;
@@ -130,11 +131,11 @@
       }
       figure.cell:hover { border-color: var(--accent); transform: translateY(-1px); }
       figure.cell.reserved { border-color: rgba(227, 177, 94, 0.4); }
-      figure.cell img {
+      figure.cell canvas {
         display: block;
         width: 100%;
+        height: auto;
         aspect-ratio: 1 / 1;
-        object-fit: cover;
         background: #050608;
       }
       figcaption {
@@ -243,7 +244,7 @@
         font-size: 11px;
         letter-spacing: 0.42em;
         text-transform: uppercase;
-        color: var(--muted);
+        color: var(--genesis);
         margin-left: 0.42em;
         text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
       }
