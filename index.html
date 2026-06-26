@@ -144,8 +144,11 @@
         padding: 8px 10px;
         font-size: 11px;
         font-variant-numeric: tabular-nums;
+        /* Cell captions stay on the monospace data face: far more legible at
+           this tiny size than the display font. Rest of the page is Syne. */
+        font-family: var(--font-mono);
       }
-      figcaption .id { font-family: var(--font-page); color: var(--text); }
+      figcaption .id { font-family: var(--font-mono); color: var(--text); }
       figcaption .tiers { color: var(--muted); font-size: 10px; letter-spacing: 0.04em; }
       .star { color: var(--reserved); }
       .badge-row {
