@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     />
     <style>
       :root {
@@ -35,11 +35,13 @@
         --muted: #8a8a91;
         --accent: #c7b38b;
         --reserved: #e3b15e;
+        --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: "Space Grotesk", system-ui, sans-serif;
+        font-family: var(--font-mono);
         background: var(--bg);
         color: var(--text);
         padding: 0 0 80px;
@@ -67,9 +69,11 @@
       }
       .title h1 {
         margin: 2px 0 0;
-        font-size: 18px;
+        font-family: var(--font-display);
+        font-optical-sizing: auto;
+        font-size: 21px;
         font-weight: 500;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.01em;
         color: var(--accent);
       }
 
@@ -140,7 +144,7 @@
         font-size: 11px;
         font-variant-numeric: tabular-nums;
       }
-      figcaption .id { font-family: ui-monospace, Menlo, monospace; color: var(--text); }
+      figcaption .id { font-family: var(--font-mono); color: var(--text); }
       figcaption .tiers { color: var(--muted); font-size: 10px; letter-spacing: 0.04em; }
       .star { color: var(--reserved); }
       .badge-row {
@@ -170,6 +174,125 @@
         color: var(--muted);
       }
       .legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+      /* --- Cinematic intro overlay ----------------------------------------- */
+      /* Visible from first paint (no JS needed to show it), so the gallery
+         never flashes before the intro takes over. intro.js animates it and
+         removes it; an inline failsafe guarantees it is never permanent. */
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #000;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      #intro.intro-done {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.7s ease;
+      }
+      .intro-stage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100vmax;
+        height: 100vmax;
+        transform: translate(-50%, -50%);
+        will-change: transform;
+      }
+      #introCanvas { display: block; width: 100%; height: 100%; }
+      .intro-vignette {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0) 42%, rgba(0,0,0,0.6) 100%);
+      }
+      .intro-bar {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: #000;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .intro-bar-top { top: 0; }
+      .intro-bar-bottom { bottom: 0; }
+      .intro-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 15%;
+        text-align: center;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(14px);
+        padding: 22px 0 30px;
+        /* Soft dark scrim so the title stays legible even when the lattice
+           peaks in brightness right as the title lands. */
+        background: radial-gradient(ellipse 62% 130% at 50% 58%, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0) 72%);
+      }
+      .intro-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-left: 0.42em;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+      }
+      .intro-name {
+        font-family: var(--font-display);
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-size: clamp(30px, 6.6vw, 80px);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text);
+        margin: 10px 0 0;
+        /* Dark layer for contrast, gold layer as the glow accent. */
+        text-shadow: 0 2px 22px rgba(0, 0, 0, 0.92), 0 0 50px rgba(199, 179, 139, 0.22);
+      }
+      .intro-rule {
+        width: 0;
+        height: 1px;
+        margin: 16px auto 12px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      }
+      .intro-by {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-left: 0.34em;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+      }
+      .intro-skip {
+        position: absolute;
+        right: 18px;
+        bottom: 16px;
+        z-index: 4;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 14px;
+        cursor: pointer;
+        opacity: 0.55;
+        transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      }
+      .intro-skip:hover { opacity: 1; color: var(--text); border-color: var(--accent); }
+      /* Reduced-motion visitors skip the cinematic entirely. */
+      @media (prefers-reduced-motion: reduce) {
+        #intro { display: none; }
+      }
     </style>
     <script type="importmap">
       {
@@ -181,6 +304,37 @@
     </script>
   </head>
   <body>
+    <div id="intro" aria-hidden="true">
+      <div class="intro-stage" id="introStage">
+        <canvas id="introCanvas"></canvas>
+      </div>
+      <div class="intro-vignette"></div>
+      <div class="intro-bar intro-bar-top" id="introBarTop"></div>
+      <div class="intro-bar intro-bar-bottom" id="introBarBottom"></div>
+      <div class="intro-title" id="introTitle">
+        <div class="intro-eyebrow">Genesis · 121 editions</div>
+        <div class="intro-name">Entropy Protocol</div>
+        <div class="intro-rule" id="introRule"></div>
+        <div class="intro-by">NULLGRID</div>
+      </div>
+      <button class="intro-skip" type="button" id="introSkip">skip</button>
+    </div>
+    <noscript><style>#intro { display: none; }</style></noscript>
+    <script>
+      /* Failsafe: if the module never boots (e.g. network), never trap the
+         page behind the black overlay. Harmless once intro.js removes it. */
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var i = document.getElementById("intro");
+          if (i) {
+            i.style.transition = "opacity .5s ease";
+            i.style.opacity = "0";
+            setTimeout(function () { if (i.parentNode) i.remove(); }, 600);
+          }
+        }, 9000);
+      });
+    </script>
+
     <header>
       <div class="title">
         <div class="label">Genesis · 121 editions</div>
@@ -196,7 +350,7 @@
 
     <script type="module" src="/viewer/gallery.js"></script>
   
-    <footer style="text-align:center;padding:28px 0 8px;font-size:12px;color:#8a8a91;font-family:'Space Grotesk',system-ui,sans-serif;">
+    <footer style="text-align:center;padding:28px 0 8px;font-size:12px;color:#8a8a91;font-family:var(--font-mono);">
       a long-horizon, fully on-chain collection by NULLGRID ·
       <a href="https://x.com/NULLGRID_" target="_blank" rel="noopener" style="color:#c7b38b;text-decoration:none;">@NULLGRID_</a>
       · click any piece to explore its full ten-year life

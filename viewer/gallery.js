@@ -1,5 +1,6 @@
 import { generateLattice } from "/engine/dist/src/index.js";
 import { createLatticeScene, stateAtYears } from "/viewer/scene.js";
+import { playIntro } from "/viewer/intro.js";
 
 const TOTAL_TOKENS = 121;
 const RENDER_PX = 300;       // bake resolution per thumbnail
@@ -198,16 +199,23 @@ function selectStop(idx) {
   }
   tokens = (await res.json()).tokens;
 
+  // Gallery skeleton (DOM only) so it is ready underneath the cold-open.
+  buildStops();
+  buildLegend();
+  buildGrid();
+
+  // Cinematic cold-open first, on a single WebGL context. Wait for it to finish
+  // and free its context before creating the bake renderer: the intro then
+  // renders reliably everywhere (a few software-GL fallbacks evict a second
+  // live context). The grid materialises as the thumbnails bake afterwards.
+  await playIntro({ tokens });
+
   scene = createLatticeScene({
     canvas: els.bakeCanvas,
     size: RENDER_PX,
     preserveDrawingBuffer: true,
   });
   scene.resize(RENDER_PX);
-
-  buildStops();
-  buildLegend();
-  buildGrid();
 
   await bakeStop(stopIndex);
 })();
