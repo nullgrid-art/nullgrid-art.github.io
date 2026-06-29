@@ -5,6 +5,7 @@ import { playIntro } from "/viewer/intro.js";
 const TOTAL_TOKENS = 121;
 const RENDER_PX = 300;          // shared offscreen render size; cells blit from this
 const FRAME_BUDGET_MS = 11;     // per-frame render budget; visible cells round-robin within it
+const ROTATION_SPEED = 1.6;     // multiplier on the per-seed orbit speed, a touch more life
 const STATIC_TIME = 7200;       // fixed clock for reduced-motion (a flattering still angle)
 
 // Lifetime stops: fraction of the 10-year maximum horizon. The lattices rotate
@@ -143,7 +144,7 @@ function buildGrid() {
 function renderCell(id, now) {
   const e = tokens[String(id)];
   const cp = camFor(id);
-  const ct = now * cp.orbitSpeed * cp.orbitDirection + cp.yawPhase;
+  const ct = now * cp.orbitSpeed * ROTATION_SPEED * cp.orbitDirection + cp.yawPhase;
   scene.setLattice(latticeFor(id));
   scene.renderFrame({
     state: stateFor(id),
